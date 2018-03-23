@@ -46,7 +46,7 @@ function handleText(message, replyToken, source) {
     return client.replyMessage(
         replyToken, {
             type: 'text',
-            text: message
+            text: message.text
         }
     );
 }
