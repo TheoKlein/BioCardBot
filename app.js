@@ -51,6 +51,15 @@ function handleText(message, replyToken, source) {
     );
 }
 
+function handleImage(message, replyToken) {
+    return client.replyMessage(
+        replyToken, {
+            type: 'text',
+            text: 'image get!'
+        }
+    );
+}
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
