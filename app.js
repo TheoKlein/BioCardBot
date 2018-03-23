@@ -24,17 +24,31 @@ app.post('/api/messages', line.middleware(config), (req, res) => {
 
 
 function handleEvent(event) {
-    if (event.type !== 'message' || event.message.type !== 'text') {
-        // ignore non-text-message event
-        return Promise.resolve(null);
+    // only deal with text and image, ignore other events
+    switch (event.type) {
+        case 'message':
+            const message = event.message;
+            switch (message.type) {
+                case 'text':
+                    return handleText(message, event.replyToken, event.source);
+                case 'image':
+                    return handleImage(message, event.replyToken);
+                default:
+                    return Promise.resolve(null);
+            }
+        default:
+            return Promise.resolve(null);
     }
+}
 
-    const echo = {
-        type: 'text',
-        text: event.message.text
-    };
 
-    return client.replyMessage(event.replyToken, echo);
+function handleText(message, replyToken, source) {
+    return client.replyMessage(
+        replyToken, {
+            type: 'text',
+            text: message
+        }
+    );
 }
 
 
